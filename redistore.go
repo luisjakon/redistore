@@ -105,6 +105,18 @@ func (s *RediStore) ping() (bool, error) {
 	return (data == "PONG"), nil
 }
 
+func (s *RediStore) StoreAs(ser string) *RediStore {
+	switch ser {
+	case "JSON":
+		s.serializer = JSONSerializer{}
+	case "BINARY":
+		s.serializer = GobSerializer{}
+	default:
+		s.serializer = GobSerializer{}
+	}
+	return s
+}
+
 func (s *RediStore) Close() error {
 	return s.Pool.Close()
 }

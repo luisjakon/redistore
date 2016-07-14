@@ -10,8 +10,8 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-const (
-	SESSION_HEADER  = "X-Core-Session"
+var (
+	SESSION_HEADER  = "X-Session"
 	SESSION_PREFIX  = "sess_"
 	DEFAULT_MAX_AGE = 60 * 20 // 20 mins
 )
@@ -37,6 +37,11 @@ func NewSessionStore(size int, network, address, password string, keyPairs ...[]
 		Options: &sessions.Options{
 			MaxAge: DEFAULT_MAX_AGE,
 		}}, nil
+}
+
+func (ss *SessionStore) StoreAs(ser string) *SessionStore {
+	ss.store.StoreAs(ser)
+	return ss
 }
 
 func (ss *SessionStore) Get(r *http.Request, name string) (*sessions.Session, error) {
